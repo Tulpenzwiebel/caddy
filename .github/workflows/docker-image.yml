@@ -14,5 +14,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag caddy:$(date +%s)
+            
+    - name: Get Caddy base version
+      id: base
+      run: |
+        docker pull caddy:2-alpine
+        TAG=$(docker inspect caddy:2-alpine --format '{{index .RepoTags 0}}')
+        VERSION=$(echo $TAG | sed 's/caddy://')
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Login GHCR
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+    - name: Build image
+      run: |
+        docker build \
+          -t ghcr.io/${{ github.repository_owner }}/caddy-security-cloudflare-cfkv:${{ steps.base.outputs.version }} \
+          -t ghcr.io/${{ github.repository_owner }}/caddy-security-cloudflare-cfkv:2 \
+          -t ghcr.io/${{ github.repository_owner }}/caddy-security-cloudflare-cfkv:latest \
