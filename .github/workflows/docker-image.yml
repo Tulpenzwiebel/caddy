@@ -30,12 +30,12 @@ jobs:
     - name: Build image
       run: |
         docker build \
-          -t ghcr.io/${ OWNER_LC }/caddy-security-cloudflare-cfkv:${{ steps.base.outputs.version }} \
-          -t ghcr.io/${ OWNER_LC }/caddy-security-cloudflare-cfkv:2 \
-          -t ghcr.io/${ OWNER_LC }/caddy-security-cloudflare-cfkv:latest \
+          -t ghcr.io/${OWNER_LC}/caddy-security-cloudflare-cfkv:${{ steps.base.outputs.version }} \
+          -t ghcr.io/${OWNER_LC}/caddy-security-cloudflare-cfkv:2 \
+          -t ghcr.io/${OWNER_LC}/caddy-security-cloudflare-cfkv:latest \
           .
 
     - name: Push all tags
       run: |
-        docker push ghcr.io/${ OWNER_LC }/caddy-security-cloudflare-cfkv --all-tags
+        docker push ghcr.io/${OWNER_LC}/caddy-security-cloudflare-cfkv --all-tags
         
